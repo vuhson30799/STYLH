@@ -1,32 +1,57 @@
 import React from "react";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import './Topic.css'
-import {faComments} from "@fortawesome/free-solid-svg-icons";
+import './TopicOverview.css'
+import {loadAllThreadsForTopic} from "../webservice/ThreadWebService";
+import {ThreadOverview} from "../thread/ThreadOverview";
 
 interface TopicProps {
+    id: string,
     title: string,
     threads: number,
     messages: number
 }
-export class Topic extends React.Component<TopicProps, any> {
+
+interface ThreadData {
+    threads: {
+        id: string,
+        title: string,
+        replies: number,
+        views: number,
+        author: string,
+        postTime: string
+    }[]
+}
+
+export class Topic extends React.Component<TopicProps, ThreadData> {
+    constructor(props: TopicProps) {
+        super(props);
+        this.state = {
+            threads: [{
+                id: '',
+                title: '',
+                replies: 0,
+                views: 0,
+                author: '',
+                postTime: ''
+            }]
+        }
+    }
     render() {
         return (
-            <div className={"body-topic"}>
-                <div className={"title-topic"}>
-                    <FontAwesomeIcon icon={faComments} size={"2x"} style={{color: "#ffba8c", marginRight: "3px"}}/>
-                    <p>{this.props.title}</p>
-                </div>
-                <div className={"end-topic"}>
-                    <div className={"end-topic-info"}>
-                        <p style={{color:"#8f9193", fontSize: "80%"}}>Threads</p>
-                        <p>{this.props.threads}</p>
-                    </div>
-                    <div className={"end-topic-info"}>
-                        <p style={{color:"#8f9193", fontSize: "80%"}}>Messages</p>
-                        <p>{this.props.messages}</p>
-                    </div>
+            <div>
+                <div className={"filter-topic"}>Filter</div>
+                <div>
+                    {this.state.threads.map(thread => (<ThreadOverview id={thread.id}
+                                                                       title={thread.title}
+                                                                       author={thread.author}
+                                                                       views={thread.views}
+                                                                       replies={thread.replies}
+                                                                       postTime={thread.postTime}/>))}
                 </div>
             </div>
         );
+    }
+
+    componentDidMount() {
+        this.setState({threads: loadAllThreadsForTopic(this.props.id)})
     }
 }

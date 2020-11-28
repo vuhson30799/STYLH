@@ -1,5 +1,5 @@
 import React from "react";
-import {Topic} from "../topic/Topic";
+import {TopicOverview} from "../topic/TopicOverview";
 import {loadTopicsForMainTopic} from "../webservice/TopicWebServices";
 import './MainTopic.css'
 
@@ -10,6 +10,7 @@ interface MainTopicProps {
 
 interface TopicData {
     topics: {
+        id: string,
         title: string,
         threads: number,
         messages: number
@@ -20,6 +21,7 @@ export class MainTopic extends React.Component<MainTopicProps, TopicData > {
         super(props);
         this.state = {
             topics: [{
+                id: "",
                 title: "",
                 threads: 0,
                 messages: 0
@@ -31,7 +33,7 @@ export class MainTopic extends React.Component<MainTopicProps, TopicData > {
         return (
             <div className={"body-main-topic"}>
                 <h3 className={"title-main-topic"}>{this.props.title}</h3>
-                {this.state.topics.map((topic: any) => (<Topic title={topic.title} threads={topic.threads} messages={topic.messages}/>))}
+                {this.state.topics.map((topic: any) => (<TopicOverview id={topic.id} title={topic.title} threads={topic.threads} messages={topic.messages}/>))}
             </div>
 
         );
