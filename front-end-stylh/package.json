@@ -18,6 +18,7 @@
     "react-bootstrap": "^1.4.0",
     "react-dom": "^17.0.1",
     "react-flexr": "^3.0.0-beta.2",
+    "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.0",
     "typescript": "~4.0.5",
     "web-vitals": "^0.2.4"
@@ -47,6 +48,7 @@
     ]
   },
   "devDependencies": {
-    "@types/react-flexr": "^2.0.10"
+    "@types/react-flexr": "^2.0.10",
+    "@types/react-router-dom": "^5.1.6"
   }
 }
