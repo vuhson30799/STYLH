@@ -1,5 +1,6 @@
 package stylh.controller;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import stylh.model.Comment;
 import stylh.service.CommentService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CommentController {
@@ -18,23 +20,37 @@ public class CommentController {
 
 
     @RequestMapping(value = "/comments/", method = RequestMethod.GET)
-    public ResponseEntity<List<Comment>> listAllComments() {
+    public ResponseEntity<List<JSONObject>> listAllComments() {
         List<Comment> comments = commentService.findAll();
         if (comments.isEmpty()) {
-            return new ResponseEntity<List<Comment>>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<List<Comment>>(comments, HttpStatus.OK);
+        List<JSONObject> objects = new ArrayList<>();
+        JSONObject object;
+        for(Comment comment : comments){
+            object = new JSONObject();
+            object.put("commentID",comment.getCommentID());
+            object.put("commentContent",comment.getCommentContent());
+            object.put("commentDate",comment.getCommentDate());
+
+            objects.add(object);
+        }
+        return new ResponseEntity<>(objects, HttpStatus.OK);
     }
 
 
     @RequestMapping(value = "/comments/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Comment> getComment(@PathVariable("id") long id) {
+    public ResponseEntity<JSONObject> getComment(@PathVariable("id") long id) {
         System.out.println("Fetching comment with id " + id);
         Comment comment = commentService.findById(id);
         if (comment == null) {
             System.out.println("comment with id " + id + " not found");
-            return new ResponseEntity<Comment>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<Comment>(comment, HttpStatus.OK);
+        JSONObject object = new JSONObject();
+        object.put("commentID",comment.getCommentID());
+        object.put("commentContent",comment.getCommentContent());
+        object.put("commentDate",comment.getCommentDate());
+        return new ResponseEntity<>(object, HttpStatus.OK);
     }
 }

@@ -10,8 +10,10 @@ public class Topic {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long topicID;
     private String topicName;
-    private int threadCount;
-    private long commentCount;
+    private int threadNumber;
+    private long commentNumber;
+    private MainTopic mainTopic;
+
 
     @OneToMany(targetEntity = Thread.class)
     private List<Thread> threads;
@@ -26,6 +28,16 @@ public class Topic {
 
     public Topic() {
     }
+
+    public MainTopic getMainTopic() {
+        return mainTopic;
+    }
+
+    public void setMainTopic(MainTopic mainTopic) {
+        this.mainTopic = mainTopic;
+    }
+
+
 
     public Long getTopicID() {
         return topicID;
@@ -43,19 +55,19 @@ public class Topic {
         this.topicName = topicName;
     }
 
-    public int getThreadCount() {
-        return threadCount;
+    public int getThreadNumber() {
+        return threadNumber;
     }
 
-    public void setThreadCount(int threadCount) {
-        this.threadCount = threadCount;
+    public void setThreadNumber(int threadCount) {
+        this.threadNumber = threadCount;
     }
 
-    public long getCommentCount() {
-        return commentCount;
+    public long getCommentNumber() {
+        return commentNumber;
     }
 
-    public void setCommentCount(long commentCount) {
-        this.commentCount = commentCount;
+    public void setCommentNumber(long commentCount) {
+        this.commentNumber = commentCount;
     }
 }

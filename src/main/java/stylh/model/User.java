@@ -11,6 +11,7 @@ public class User {
     private Long userID;
     private String loginName;
     private String password;
+    private String username;
     private String email;
 
     @OneToMany(targetEntity = Thread.class)
@@ -27,6 +28,14 @@ public class User {
 
     public void setThreads(List<Thread> threads) {
         this.threads = threads;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public List<Comment> getComments() {

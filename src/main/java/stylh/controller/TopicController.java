@@ -1,5 +1,6 @@
 package stylh.controller;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import stylh.model.Topic;
 import stylh.service.TopicService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -20,23 +22,42 @@ public class TopicController {
 
 
     @RequestMapping(value = "/topics/", method = RequestMethod.GET)
-    public ResponseEntity<List<Topic>> listAllTopics() {
+    public ResponseEntity<List<JSONObject>> listAllTopics() {
         List<Topic> topics = topicService.findAll();
         if (topics.isEmpty()) {
-            return new ResponseEntity<List<Topic>>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<List<Topic>>(topics, HttpStatus.OK);
+        List<JSONObject> objects = new ArrayList<>();
+        JSONObject object;
+
+        for(Topic topic : topics){
+            object = new JSONObject();
+
+            object.put("topicID",topic.getTopicID());
+            object.put("topicName",topic.getTopicName());
+            object.put("threadNumber",topic.getThreadNumber());
+            object.put("commentNumber",topic.getCommentNumber());
+
+            objects.add(object);
+        }
+        return new ResponseEntity<>(objects, HttpStatus.OK);
     }
 
 
     @RequestMapping(value = "/topics/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Topic> getTopic(@PathVariable("id") long id) {
+    public ResponseEntity<JSONObject> getTopic(@PathVariable("id") long id) {
         System.out.println("Fetching topic with id " + id);
         Topic topic = topicService.findById(id);
         if (topic == null) {
             System.out.println("topic with id " + id + " not found");
-            return new ResponseEntity<Topic>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<Topic>(topic, HttpStatus.OK);
+        JSONObject object = new JSONObject();
+
+        object.put("topicID",topic.getTopicID());
+        object.put("topicName",topic.getTopicName());
+        object.put("threadNumber",topic.getThreadNumber());
+        object.put("commentNumber",topic.getCommentNumber());
+        return new ResponseEntity<>(object, HttpStatus.OK);
     }
 }

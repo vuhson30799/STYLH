@@ -13,6 +13,7 @@ public class Thread {
     private int reply;
     private int view;
     private Date postDate;
+    private ThreadType threadType;
 
     @ManyToOne
     @JoinColumn(name = "userID")
@@ -24,6 +25,14 @@ public class Thread {
 
     @OneToMany(targetEntity = Comment.class)
     private List<Comment> comments;
+
+    public ThreadType getThreadType() {
+        return threadType;
+    }
+
+    public void setThreadType(ThreadType threadType) {
+        this.threadType = threadType;
+    }
 
     public List<Comment> getComments() {
         return comments;
